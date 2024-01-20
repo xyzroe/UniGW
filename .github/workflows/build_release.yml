@@ -77,7 +77,7 @@ jobs:
       - name: Upload firmware artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: firmware
+          name: firmware_8266
           path: ./build_output
 
   build_firmware_32:
@@ -148,10 +148,15 @@ jobs:
         run: |
           git clone https://github.com/arendst/Tasmota.git
           echo "git clone Tasmota - ok"
-      - name: Download  firmwares
+      - name: Download  firmwares ESP32
         uses: actions/download-artifact@v3
         with:
           name: firmware
+          path: Tasmota/firmware
+      - name: Download  firmwares ESP8266
+        uses: actions/download-artifact@v3
+        with:
+          name: firmware_8266
           path: Tasmota/firmware
       - name: Display downloaded files
         run: |
