@@ -1,4 +1,4 @@
-name: Build, release
+name: Build firmware and release
 
 permissions:
   contents: write
@@ -18,7 +18,7 @@ jobs:
         variant:
           - tasmota32-safeboot
     steps:
-      - name: Clone UniGW repository
+      - name: Checkout UniGW repository
         uses: actions/checkout@v3
       - name: Clone Tasmota repository
         run: |
@@ -52,7 +52,7 @@ jobs:
           - UniGW-MindBrd_Wemos32
           - UniGW-MindBrd_WT32-ETH01
     steps:
-      - name: Clone UniGW repository
+      - name: Checkout UniGW repository
         uses: actions/checkout@v3
       - name: Clone Tasmota repository, add custom files
         run: |
