@@ -105,6 +105,10 @@ jobs:
           cd UniGW
           value=$(git describe --tags $(git rev-list --tags --max-count=1))
           echo "fw_version=$value" >> $GITHUB_OUTPUT
+      - name: Git clone Tasmota
+        run: |
+          git clone https://github.com/arendst/Tasmota.git
+          echo "git clone Tasmota - ok"
       - name: Download  firmwares
         uses: actions/download-artifact@v3
         with:
@@ -113,12 +117,6 @@ jobs:
       - name: Display downloaded files
         run: |
           ls -R Tasmota/firmware/
-      - name: Git clone Tasmota, change work dir
-        run: |
-          git clone https://github.com/arendst/Tasmota.git
-          echo "git clone Tasmota - ok"
-          cd Tasmota
-          echo "cd Tasmota"
       - name: Get latest Tasmota Release Version
         id: tasmota_version
         shell: bash
@@ -136,4 +134,4 @@ jobs:
           tag_name: ${{ steps.fw_version.outputs.fw_version }}
           name: "${{ steps.fw_version.outputs.fw_version }} (${{ steps.date.outputs.date }}, ${{ steps.tasmota_version.outputs.tasmota_version }})"
           files: |
-            Tasmota/firmware/*.bin
+            Tasmota/firmware/firmware/*.bin
