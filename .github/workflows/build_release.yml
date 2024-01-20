@@ -78,7 +78,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: firmware_8266
-          path: ./build_output
+          path: Tasmota/build_output
 
   build_firmware_32:
     needs: build_safeboot_images
