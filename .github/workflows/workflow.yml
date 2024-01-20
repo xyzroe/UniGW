@@ -24,14 +24,6 @@ jobs:
         run: |
           git clone https://github.com/arendst/Tasmota.git
           echo "git clone Tasmota - ok"
-          cp config/platformio_tasmota_user_env.ini Tasmota/platformio_tasmota_user_env.ini
-          echo "platformio_tasmota_user_env.ini - copy ok"
-          cp config/platformio_override.ini Tasmota/platformio_override.ini
-          echo "platformio_override.ini - copy ok"
-          cp config/user_config_override.h Tasmota/tasmota/user_config_override.h
-          echo "user_config_override.h - copy ok"
-          cd Tasmota
-          echo "cd Tasmota"
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -40,6 +32,7 @@ jobs:
         run: |
           pip install wheel
           pip install -U platformio
+          cp ./platformio_override_sample.ini ./platformio_override.ini
       - name: Run PlatformIO
         run: |
           cd Tasmota
