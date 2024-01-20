@@ -10,7 +10,46 @@ on:
       - "v*" # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
+  safeboot-images:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      matrix:
+        variant:
+          - tasmota32-safeboot
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+      - name: Git clone Tasmota, add custom files, change work dir
+        run: |
+          git clone https://github.com/arendst/Tasmota.git
+          echo "git clone Tasmota - ok"
+          cp config/platformio_tasmota_user_env.ini Tasmota/platformio_tasmota_user_env.ini
+          echo "platformio_tasmota_user_env.ini - copy ok"
+          cp config/platformio_override.ini Tasmota/platformio_override.ini
+          echo "platformio_override.ini - copy ok"
+          cp config/user_config_override.h Tasmota/tasmota/user_config_override.h
+          echo "user_config_override.h - copy ok"
+          cd Tasmota
+          echo "cd Tasmota"
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          pip install wheel
+          pip install -U platformio
+      - name: Run PlatformIO
+        run: platformio run -e ${{ matrix.variant }}
+      - name: Upload safeboot firmware artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: firmware_safeboot
+          path: ./build_output
+
   build_firmware:
+    needs: safeboot-images
     runs-on: ubuntu-latest
     continue-on-error: true
     strategy:
@@ -44,6 +83,14 @@ jobs:
         run: |
           pip install wheel
           pip install -U platformio
+      - name: Download safeboot firmwares
+        uses: actions/download-artifact@v3
+        with:
+          name: firmware_safeboot
+          path: Tasmota/firmware
+      - name: Display downloaded files
+        run: |
+          ls -R Tasmota/firmware/
       - name: Run PlatformIO
         run: |
           cd Tasmota
@@ -64,7 +111,7 @@ jobs:
         id: fw_version
         shell: bash
         run: |
-          value=`git describe --tags $(git rev-list --tags --max-count=1)`
+          value=$(git describe --tags $(git rev-list --tags --max-count=1))
           echo "fw_version=$value" >> $GITHUB_OUTPUT
       - name: Download  firmwares
         uses: actions/download-artifact@v3
@@ -84,7 +131,7 @@ jobs:
         id: tasmota_version
         shell: bash
         run: |
-          value=`git describe --tags $(git rev-list --tags --max-count=1)`
+          value=$(git describe --tags $(git rev-list --tags --max-count=1))
           echo "tasmota_version=$value" >> $GITHUB_OUTPUT
           cd ..
       - name: Get current date
