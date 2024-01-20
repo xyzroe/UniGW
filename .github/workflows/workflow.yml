@@ -25,19 +25,13 @@ jobs:
         run: |
           git clone https://github.com/arendst/Tasmota.git
           echo "git clone Tasmota - ok"
-          if [ -f "Tasmota/platformio_tasmota_user_env.ini" ]; then
-          rm Tasmota/platformio_tasmota_user_env.ini 
-          fi
+          if [ -f "Tasmota/platformio_tasmota_user_env.ini" ]; then rm Tasmota/platformio_tasmota_user_env.ini; fi
           ln config/platformio_tasmota_user_env.ini Tasmota/platformio_tasmota_user_env.ini
           echo "platformio_tasmota_user_env.ini - link ok"
-          if [ -f "Tasmota/platformio_override.ini" ]; then
-          rm Tasmota/platformio_override.ini 
-          fi
+          if [ -f "Tasmota/platformio_override.ini" ]; then rm Tasmota/platformio_override.ini; fi
           ln config/platformio_override.ini Tasmota/platformio_override.ini
           echo "platformio_override.ini - link ok"
-          if [ -f "Tasmota/tasmota/user_config_override.h" ]; then
-          rm Tasmota/tasmota/user_config_override.h
-          fi
+          if [ -f "Tasmota/tasmota/user_config_override.h" ]; then rm Tasmota/tasmota/user_config_override.h; fi
           ln config/user_config_override.h Tasmota/tasmota/user_config_override.h
           echo "user_config_override.h - link ok"
           cd Tasmota
