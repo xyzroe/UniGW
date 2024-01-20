@@ -45,7 +45,9 @@ jobs:
           pip install wheel
           pip install -U platformio
       - name: Run PlatformIO
-        run: platformio run -e ${{ matrix.variant }}
+        run: |
+          cd Tasmota
+          platformio run -e ${{ matrix.variant }}
       - name: Upload firmware artifacts
         uses: actions/upload-artifact@v3
         with:
