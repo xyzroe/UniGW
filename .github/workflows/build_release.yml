@@ -51,6 +51,7 @@ jobs:
         variant:
           - UniGW-MindBrd_Wemos32
           - UniGW-MindBrd_WT32-ETH01
+          - UniGW_T-Internet-COM
     steps:
       - name: Checkout UniGW repository
         uses: actions/checkout@v3
