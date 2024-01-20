@@ -96,7 +96,7 @@ jobs:
     steps:
       - name: Clone UniGW repository
         run: |
-          git clone git@github.com:xyzroe/UniGW.git
+          git clone https://github.com/xyzroe/UniGW.git
           echo "git clone UniGW - ok"
       - name: Get latest FW Release Version
         id: fw_version
