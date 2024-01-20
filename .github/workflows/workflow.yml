@@ -102,7 +102,7 @@ jobs:
     steps:
       - name: Git clone UniGW, change work dir
         run: |
-          git clone https://github.com/xyzroe/UniGW.git
+          git clone git@github.com:xyzroe/UniGW.git
           echo "git clone UniGW - ok"
           cd UniGW
           echo "cd UniGW"
