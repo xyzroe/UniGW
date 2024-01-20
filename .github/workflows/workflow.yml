@@ -18,12 +18,11 @@ jobs:
         variant:
           - tasmota32-safeboot
     steps:
-      - name: Clone repository
+      - name: Clone UniGW repository
         uses: actions/checkout@v3
-      - name: Git clone Tasmota, add custom files, change work dir
+      - name: Clone Tasmota repository
         run: |
           git clone https://github.com/arendst/Tasmota.git
-          echo "git clone Tasmota - ok"
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -53,23 +52,18 @@ jobs:
           - UniGW-MindBrd_Wemos32
           - UniGW-MindBrd_WT32-ETH01
     steps:
-      - name: Clone repository
+      - name: Clone UniGW repository
         uses: actions/checkout@v3
-      - name: Git clone Tasmota, add custom files, change work dir
+      - name: Clone Tasmota repository, add custom files
         run: |
           git clone https://github.com/arendst/Tasmota.git
           echo "git clone Tasmota - ok"
-          if [ -f "Tasmota/platformio_tasmota_user_env.ini" ]; then rm Tasmota/platformio_tasmota_user_env.ini; fi
-          ln config/platformio_tasmota_user_env.ini Tasmota/platformio_tasmota_user_env.ini
-          echo "platformio_tasmota_user_env.ini - link ok"
-          if [ -f "Tasmota/platformio_override.ini" ]; then rm Tasmota/platformio_override.ini; fi
-          ln config/platformio_override.ini Tasmota/platformio_override.ini
-          echo "platformio_override.ini - link ok"
-          if [ -f "Tasmota/tasmota/user_config_override.h" ]; then rm Tasmota/tasmota/user_config_override.h; fi
-          ln config/user_config_override.h Tasmota/tasmota/user_config_override.h
-          echo "user_config_override.h - link ok"
-          cd Tasmota
-          echo "cd Tasmota"
+          cp config/platformio_tasmota_user_env.ini Tasmota/platformio_tasmota_user_env.ini
+          echo "platformio_tasmota_user_env.ini - copy ok"
+          cp config/platformio_override.ini Tasmota/platformio_override.ini
+          echo "platformio_override.ini - copy ok"
+          cp config/user_config_override.h Tasmota/tasmota/user_config_override.h
+          echo "user_config_override.h - copy ok"
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -100,12 +94,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: build_firmware
     steps:
-      - name: Git clone UniGW, change work dir
+      - name: Clone UniGW repository
         run: |
           git clone git@github.com:xyzroe/UniGW.git
           echo "git clone UniGW - ok"
-          cd UniGW
-          echo "cd UniGW"
       - name: Get latest FW Release Version
         id: fw_version
         shell: bash
@@ -144,4 +136,4 @@ jobs:
           tag_name: ${{ steps.fw_version.outputs.fw_version }}
           name: "${{ steps.fw_version.outputs.fw_version }} (${{ steps.date.outputs.date }}, ${{ steps.tasmota_version.outputs.tasmota_version }})"
           files: |
-            ./firmware/*.bin
+            Tasmota/firmware/*.bin
