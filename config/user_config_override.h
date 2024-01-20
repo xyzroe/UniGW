@@ -34,23 +34,30 @@
  *   - All parameters can be persistent changed online using commands via MQTT, WebConsole or Serial.
 \*****************************************************************************************************/
 
-#ifdef CLEAR_BUILD
-#ifdef ESP32
 // All unnecessary stuff. Clean
-
+#ifdef CLEAR_BUILD
 #undef USE_AC_ZERO_CROSS_DIMMER
 #undef USE_DOMOTICZ
 #undef USE_EMULATION_HUE
 #undef USE_EMULATION_WEMO
-
+#undef USE_LIGHT  // Add support for light control
+#undef USE_WS2812 // WS2812 Led string using library NeoPixelBus (+5k code, +1k mem, 232 iram) - Disable by //
+#undef USE_IR_REMOTE
+#undef USE_IR_SEND_NEC // Support IRsend NEC protocol
+#undef USE_IR_SEND_RC5 // Support IRsend Philips RC5 protocol
+#undef USE_IR_SEND_RC6 // Support IRsend Philips RC6 protocol
+#undef USE_TUYA_MCU     // Add support for Tuya Serial MCU
+#undef TUYA_DIMMER_ID   // Default dimmer Id
+#undef USE_TUYA_TIME    // Add support for Set Time in Tuya MCU
+// Enable IR devoder via GPIO `IR Recv` - always enabled if `USE_IR_REMOTE_FULL`
+#undef USE_IR_RECEIVE
+#ifdef ESP32
 #undef ROTARY_V1        // Add support for Rotary Encoder as used in MI Desk Lamp (+0k8 code)
 #undef ROTARY_MAX_STEPS // Rotary step boundary
 #undef USE_SONOFF_RF    // Add support for Sonoff Rf Bridge (+3k2 code)
 #undef USE_RF_FLASH     // Add support for flashing the EFM8BB1 chip on the Sonoff RF Bridge. C2CK must be connected to GPIO4, C2D to GPIO5 on the PCB (+2k7 code)
 #undef USE_SONOFF_SC    // Add support for Sonoff Sc (+1k1 code)
-#undef USE_TUYA_MCU     // Add support for Tuya Serial MCU
-#undef TUYA_DIMMER_ID   // Default dimmer Id
-#undef USE_TUYA_TIME    // Add support for Set Time in Tuya MCU
+
 // #undef USE_TUYAMCUBR                            // Add support for TuyaMCU Bridge
 #undef USE_ARMTRONIX_DIMMERS // Add support for Armtronix Dimmers (+1k4 code)
 #undef USE_PS_16_DZ          // Add support for PS-16-DZ Dimmer (+2k code)
@@ -110,13 +117,7 @@
 
 #undef USE_DHT
 
-#undef USE_IR_REMOTE
-#undef USE_IR_SEND_NEC // Support IRsend NEC protocol
-#undef USE_IR_SEND_RC5 // Support IRsend Philips RC5 protocol
-#undef USE_IR_SEND_RC6 // Support IRsend Philips RC6 protocol
 
-// Enable IR devoder via GPIO `IR Recv` - always enabled if `USE_IR_REMOTE_FULL`
-#undef USE_IR_RECEIVE
 
 #undef USE_ZIGBEE_ZNP
 
@@ -246,7 +247,12 @@ Examples :
 #define FALLBACK_MODULE USER_MODULE
 
 #ifdef ESP8266
-#define USER_TEMPLATE "{\"NAME\":\"Generic GW\",\"GPIO\":[1,1,1,1,1,1,1,1,1,1,1,1,1,1],\"FLAG\":0,\"BASE\":18}" // [Template] Set JSON template
+
+#ifdef UGW_WMS_D1M
+#define USER_TEMPLATE "{\"NAME\":\"Wemos D1 mini\",\"GPIO\":[1,1,1,1,1,1,0,0,1,4928,1,4960,1,0],\"FLAG\":0,\"BASE\":18}" 
+#define OTA_URL "https://github.com/xyzroe/UniGW/releases/latest/download/UniGW_Wemos-D1_mini.bin.gz"
+#endif // UGW_WMS_D1M
+
 #endif                                                                                                          // ESP8266
 
 #ifdef ESP32
